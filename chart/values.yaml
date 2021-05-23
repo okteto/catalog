@@ -3,5 +3,5 @@ tag: dev
 api:
   image: okteto.dev/api
 
-health-checker:
+healthChecker:
   image: okteto.dev/health-checker

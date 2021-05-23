@@ -3,8 +3,8 @@ kind: Deployment
 metadata:
   name: api
   labels:
-  {{- include "chart.labels" . | nindent 4 }}
-  app.kubernetes.io/component: api
+    {{- include "chart.labels" . | nindent 4 }}
+    app.kubernetes.io/component: api
 spec:
   replicas: 1
   selector:
@@ -19,22 +19,22 @@ spec:
     spec:
       terminationGracePeriodSeconds: 0
       containers:
-      - name: api
-        image: {{ .Values.api.image }}:{{ .Values.tag }}
-        env:
-        - name: HEALTH_CHECKER_URL
-          value: "http:///foo:8080/data"
-        ports:
-        - name: http
-          containerPort: 8080
-          protocol: TCP
-        livenessProbe:
-          periodSeconds: 1
-          httpGet:
-            path: /healthz
-            port: http
-        readinessProbe:
-          periodSeconds: 1
-          httpGet:
-            path: /healthz
-            port: http
+        - name: api
+          image: {{ .Values.api.image }}:{{ .Values.tag }}
+          env:
+            - name: HEALTH_CHECKER_URL
+              value: "http:///foo:8080/data"
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          livenessProbe:
+            periodSeconds: 1
+            httpGet:
+              path: /healthz
+              port: http
+          readinessProbe:
+            periodSeconds: 1
+            httpGet:
+              path: /healthz
+              port: http
