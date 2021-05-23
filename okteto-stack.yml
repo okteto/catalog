@@ -16,4 +16,4 @@ services:
     ports:
       - "8080:8080"
     environment:
-      - HEALTH_CHECKER_URL=http://health-checker:8081/service-health"
+      - HEALTH_CHECKER_URL=http://health-checker-${OKTETO_NAMESPACE}:8081/service-health"
