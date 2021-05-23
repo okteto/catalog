@@ -1,0 +1,7 @@
+tag: dev
+
+api:
+  image: okteto.dev/api
+
+health-checker:
+  image: okteto.dev/health-checker
