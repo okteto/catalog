@@ -1,0 +1,19 @@
+{
+	"folders": [
+		{
+			"path": "api"
+		},
+		{
+			"path": "health"
+		},
+		{
+			"path": "frontend"
+		},
+		{
+			"path": "service"
+		},
+		{
+			"path": "owner"
+		}
+	]
+}
