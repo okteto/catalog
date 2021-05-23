@@ -4,30 +4,38 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-
-	"github.com/okteto/catalog/health"
 )
+
+type HealthResult struct {
+	Healthy   bool   `json:"healthy"`
+	Timestamp string `json:"timestamp"`
+}
+
+type ServiceHealth struct {
+	ServiceID     string         `json:"service_id"`
+	HealthResults []HealthResult `json:"health_results"`
+}
 
 type HealthClient struct {
 	URL        string
 	HttpClient http.Client
 }
 
-func (h HealthClient) Get() (health.ServiceHealth, error) {
+func (h HealthClient) Get() (ServiceHealth, error) {
 	resp, err := h.HttpClient.Get(h.URL)
 	if err != nil {
-		return health.ServiceHealth{}, err
+		return ServiceHealth{}, err
 	}
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
 		err := fmt.Errorf("non-200 health response: %d", resp.StatusCode)
-		return health.ServiceHealth{}, err
+		return ServiceHealth{}, err
 	}
 
-	var result health.ServiceHealth
+	var result ServiceHealth
 	if err = json.NewDecoder(resp.Body).Decode(&result); err != nil {
-		return health.ServiceHealth{}, err
+		return ServiceHealth{}, err
 	}
 	return result, nil
 }
