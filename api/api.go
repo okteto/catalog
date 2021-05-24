@@ -21,21 +21,21 @@ type HealthClient struct {
 	HttpClient http.Client
 }
 
-func (h HealthClient) Get() (ServiceHealth, error) {
+func (h HealthClient) Get() ([]ServiceHealth, error) {
 	resp, err := h.HttpClient.Get(h.URL)
 	if err != nil {
-		return ServiceHealth{}, err
+		return []ServiceHealth{}, err
 	}
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
 		err := fmt.Errorf("non-200 health response: %d", resp.StatusCode)
-		return ServiceHealth{}, err
+		return []ServiceHealth{}, err
 	}
 
-	var result ServiceHealth
+	var result []ServiceHealth
 	if err = json.NewDecoder(resp.Body).Decode(&result); err != nil {
-		return ServiceHealth{}, err
+		return []ServiceHealth{}, err
 	}
 	return result, nil
 }

@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: api
   labels:
-    {{- include "chart.labels" . | nindent 4 }}
+    {{- include "catalog.labels" . | nindent 4 }}
     app.kubernetes.io/component: api
 spec:
   replicas: 1
@@ -23,7 +23,7 @@ spec:
           image: {{ .Values.api.image }}:{{ .Values.tag }}
           env:
             - name: HEALTH_CHECKER_URL
-              value: "http:///foo:8080/data"
+              value: "http://health-checker:8080/service-health"
           ports:
             - name: http
               containerPort: 8080

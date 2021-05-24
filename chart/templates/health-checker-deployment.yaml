@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: health-checker
   labels:
-    {{- include "chart.labels" . | nindent 4 }}
+    {{- include "catalog.labels" . | nindent 4 }}
     app.kubernetes.io/component: health-checker
 spec:
   replicas: {{ .Values.replicaCount }}
