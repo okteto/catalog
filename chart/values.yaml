@@ -11,3 +11,6 @@ ownerRegistry:
 
 serviceRegistry:
   image: okteto.dev/service-registry
+
+frontend:
+  image: okteto.dev/frontend
