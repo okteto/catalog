@@ -9,6 +9,7 @@ import (
 	"github.com/caarlos0/env"
 	"github.com/justinas/alice"
 	"github.com/okteto/catalog/api"
+	"github.com/okteto/divert"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/hlog"
 )
@@ -46,6 +47,7 @@ func main() {
 		hlog.UserAgentHandler("ua"),
 		hlog.RefererHandler("ref"),
 		hlog.RequestIDHandler("rid", "Request-Id"),
+		divert.InjectDivertHeader(),
 	)
 
 	httpClient := http.Client{}

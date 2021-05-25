@@ -18,7 +18,8 @@ var log = zerolog.New(os.Stdout).With().
 	Logger()
 
 type appCfg struct {
-	HTTPPort string `env:"HTTP_PORT" envDefault:"8080"`
+	HTTPPort              string `env:"HTTP_PORT" envDefault:"8080"`
+	AdvancedHealthEnabled bool   `env:"ADVANCED_HEALTH_ENABLED" envDefault:"false"`
 }
 
 func main() {
@@ -45,12 +46,23 @@ func main() {
 		hlog.RequestIDHandler("rid", "Request-Id"),
 	)
 
+	var healthClient health.HealthClient
+	if app.AdvancedHealthEnabled {
+		healthClient = &health.AdvancedHealthClient{}
+	} else {
+		healthClient = &health.SimpleHealthClient{}
+	}
+
+	healthHandler := health.Handler{
+		HealthClient: healthClient,
+	}
+
 	handler := http.NewServeMux()
 	handler.HandleFunc("/healthz", func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
 		fmt.Fprint(w, "health check passed")
 	})
-	handler.Handle("/service-health", chain.ThenFunc(health.Handler))
+	handler.Handle("/service-health", chain.ThenFunc(healthHandler.Handle))
 
 	// Start the server and set it up for graceful shutdown.
 	srv := &http.Server{

@@ -1,9 +1,12 @@
 package api
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"net/http"
+
+	"github.com/okteto/divert"
 )
 
 type HealthResult struct {
@@ -33,8 +36,14 @@ type HealthClient struct {
 	HTTPClient http.Client
 }
 
-func (h HealthClient) Get() ([]ServiceHealth, error) {
-	resp, err := h.HTTPClient.Get(h.URL)
+func (h HealthClient) Get(ctx context.Context) ([]ServiceHealth, error) {
+	req, err := http.NewRequest(http.MethodGet, h.URL, nil)
+	if err != nil {
+		return []ServiceHealth{}, err
+	}
+	req.Header.Set(divert.DivertHeaderName, divert.FromContext(ctx))
+
+	resp, err := h.HTTPClient.Do(req)
 	if err != nil {
 		return []ServiceHealth{}, err
 	}
@@ -57,8 +66,14 @@ type OwnerRegistrationClient struct {
 	HTTPClient http.Client
 }
 
-func (o OwnerRegistrationClient) Get() ([]Owner, error) {
-	resp, err := o.HTTPClient.Get(o.URL)
+func (o OwnerRegistrationClient) Get(ctx context.Context) ([]Owner, error) {
+	req, err := http.NewRequest(http.MethodGet, o.URL, nil)
+	if err != nil {
+		return []Owner{}, err
+	}
+	req.Header.Set(divert.DivertHeaderName, divert.FromContext(ctx))
+
+	resp, err := o.HTTPClient.Do(req)
 	if err != nil {
 		return []Owner{}, err
 	}
@@ -81,8 +96,14 @@ type ServiceRegistrationClient struct {
 	HTTPClient http.Client
 }
 
-func (s ServiceRegistrationClient) Get() ([]Service, error) {
-	resp, err := s.HTTPClient.Get(s.URL)
+func (s ServiceRegistrationClient) Get(ctx context.Context) ([]Service, error) {
+	req, err := http.NewRequest(http.MethodGet, s.URL, nil)
+	if err != nil {
+		return []Service{}, err
+	}
+	req.Header.Set(divert.DivertHeaderName, divert.FromContext(ctx))
+
+	resp, err := s.HTTPClient.Do(req)
 	if err != nil {
 		return []Service{}, err
 	}
@@ -116,7 +137,7 @@ type APIHandler struct {
 }
 
 func (a APIHandler) Handle(w http.ResponseWriter, r *http.Request) {
-	serviceHealth, err := a.HealthClient.Get()
+	serviceHealth, err := a.HealthClient.Get(r.Context())
 	if err != nil {
 		http.Error(
 			w,
@@ -126,7 +147,7 @@ func (a APIHandler) Handle(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	registeredOwners, err := a.OwnerRegistrationClient.Get()
+	registeredOwners, err := a.OwnerRegistrationClient.Get(r.Context())
 	if err != nil {
 		http.Error(
 			w,
@@ -136,7 +157,7 @@ func (a APIHandler) Handle(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	registerdServices, err := a.ServiceRegistrationClient.Get()
+	registerdServices, err := a.ServiceRegistrationClient.Get(r.Context())
 	if err != nil {
 		http.Error(
 			w,
