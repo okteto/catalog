@@ -1,0 +1,4 @@
+github.com/justinas/alice v1.2.0 h1:+MHSA/vccVCF4Uq37S42jwlkvI2Xzl7zTPCN5BnZNVo=
+github.com/justinas/alice v1.2.0/go.mod h1:fN5HRH/reO/zrUflLfTN43t3vXvKzvZIENsNEe7i7qA=
+github.com/okteto/divert v0.0.0-20210525222005-c7406ed445ae h1:7108+A5xtKfjK+vet8bQTqZ/plsfWtNZH0KhFkmVPBY=
+github.com/okteto/divert v0.0.0-20210525222005-c7406ed445ae/go.mod h1:fA8ho3zXK0gdfMhPaPyetDJVTKXegXlTm4QZYilh+qk=

@@ -4,11 +4,24 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+
+	"github.com/justinas/alice"
+	"github.com/okteto/divert"
 )
 
 func main() {
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		resp, err := http.Get("http://api:8080/data")
+	chain := alice.New(divert.InjectDivertHeader())
+
+	http.Handle("/", chain.ThenFunc(func(w http.ResponseWriter, r *http.Request) {
+		req, err := http.NewRequest(http.MethodGet, "http://api:8080/data", nil)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		req.Header.Set(divert.DivertHeaderName, divert.FromContext(r.Context()))
+
+		client := http.Client{}
+		resp, err := client.Do(req)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -20,7 +33,7 @@ func main() {
 
 		body, _ := ioutil.ReadAll(resp.Body)
 		fmt.Fprintln(w, string(body))
-	})
+	}))
 
 	http.HandleFunc("/healthz", func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
