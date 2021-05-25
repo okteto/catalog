@@ -5,3 +5,9 @@ api:
 
 healthChecker:
   image: okteto.dev/health-checker
+
+ownerRegistry:
+  image: okteto.dev/owner-registry
+
+serviceRegistry:
+  image: okteto.dev/service-registry

@@ -24,6 +24,10 @@ spec:
           env:
             - name: HEALTH_CHECKER_URL
               value: "http://health-checker:8080/service-health"
+            - name: OWNER_REGISTRY_URL
+              value: "http://owner-registry:8080/owners"
+            - name: SERVICE_REGISTRY_URL
+              value: "http://service-registry:8080/services"
           ports:
             - name: http
               containerPort: 8080

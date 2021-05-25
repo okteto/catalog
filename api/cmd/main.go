@@ -18,8 +18,10 @@ var log = zerolog.New(os.Stdout).With().
 	Logger()
 
 type appCfg struct {
-	HTTPPort         string `env:"HTTP_PORT" envDefault:"8080"`
-	HealthCheckerURL string `env:"HEALTH_CHECKER_URL,required"`
+	HTTPPort           string `env:"HTTP_PORT" envDefault:"8080"`
+	HealthCheckerURL   string `env:"HEALTH_CHECKER_URL,required"`
+	OwnerRegistryURL   string `env:"OWNER_REGISTRY_URL,required"`
+	ServiceRegistryURL string `env:"SERVICE_REGISTRY_URL,required"`
 }
 
 func main() {
@@ -50,7 +52,15 @@ func main() {
 	apiHandler := api.APIHandler{
 		HealthClient: api.HealthClient{
 			URL:        app.HealthCheckerURL,
-			HttpClient: httpClient,
+			HTTPClient: httpClient,
+		},
+		OwnerRegistrationClient: api.OwnerRegistrationClient{
+			URL:        app.OwnerRegistryURL,
+			HTTPClient: httpClient,
+		},
+		ServiceRegistrationClient: api.ServiceRegistrationClient{
+			URL:        app.ServiceRegistryURL,
+			HTTPClient: httpClient,
 		},
 	}
 
