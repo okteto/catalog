@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: health-checker
+  labels:
+    {{- include "catalog.labels" . | nindent 4 }}
+    app.kubernetes.io/component: health-checker
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: health-checker
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: health-checker
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec:
+      terminationGracePeriodSeconds: 0
+      containers:
+        - name: health-checker
+          image: "{{ .Values.healthChecker.image }}:{{ .Values.tag }}"
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          livenessProbe:
+            periodSeconds: 1
+            httpGet:
+              path: /healthz
+              port: http
+          readinessProbe:
+            periodSeconds: 1
+            httpGet:
+              path: /healthz
+              port: http

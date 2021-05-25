@@ -1,0 +1,7 @@
+deploy:
+  - okteto build -t okteto.dev/api:${OKTETO_GIT_COMMIT} api
+  - okteto build -t okteto.dev/health-checker:${OKTETO_GIT_COMMIT} health-checker
+  - okteto build -t okteto.dev/owner-registry:${OKTETO_GIT_COMMIT} owner-registry
+  - okteto build -t okteto.dev/service-registry:${OKTETO_GIT_COMMIT} service-registry
+  - okteto build -t okteto.dev/frontend:${OKTETO_GIT_COMMIT} frontend
+  - helm upgrade --install catalog chart --set tag=${OKTETO_GIT_COMMIT}

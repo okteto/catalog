@@ -1,0 +1,16 @@
+tag: dev
+
+api:
+  image: okteto.dev/api
+
+healthChecker:
+  image: okteto.dev/health-checker
+
+ownerRegistry:
+  image: okteto.dev/owner-registry
+
+serviceRegistry:
+  image: okteto.dev/service-registry
+
+frontend:
+  image: okteto.dev/frontend

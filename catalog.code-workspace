@@ -1,0 +1,22 @@
+{
+	"folders": [
+		{
+			"path": "api"
+		},
+		{
+			"path": "frontend"
+		},
+		{
+			"path": "chart"
+		},
+		{
+			"path": "health-checker"
+		},
+		{
+			"path": "service-registry"
+		},
+		{
+			"path": "owner-registry"
+		}
+	]
+}

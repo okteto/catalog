@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api
+  labels:
+    {{- include "catalog.labels" . | nindent 4 }}
+    app.kubernetes.io/component: api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: api
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: api
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec:
+      terminationGracePeriodSeconds: 0
+      containers:
+        - name: api
+          image: {{ .Values.api.image }}:{{ .Values.tag }}
+          env:
+            - name: HEALTH_CHECKER_URL
+              value: "http://health-checker:8080/service-health"
+            - name: OWNER_REGISTRY_URL
+              value: "http://owner-registry:8080/owners"
+            - name: SERVICE_REGISTRY_URL
+              value: "http://service-registry:8080/services"
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          livenessProbe:
+            periodSeconds: 1
+            httpGet:
+              path: /healthz
+              port: http
+          readinessProbe:
+            periodSeconds: 1
+            httpGet:
+              path: /healthz
+              port: http
