@@ -21,6 +21,11 @@ func main() {
 		body, _ := ioutil.ReadAll(resp.Body)
 		fmt.Fprintln(w, string(body))
 	})
+
+	http.HandleFunc("/healthz", func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+	})
+
 	fmt.Println("listening on :8080...")
 	http.ListenAndServe(":8080", nil)
 }
