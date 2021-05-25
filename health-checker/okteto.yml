@@ -3,15 +3,13 @@ labels:
   app.kubernetes.io/component: health-checker
 image: okteto/golang:1
 command: bash
-securityContext:
-  capabilities:
-    add:
-    - SYS_PTRACE
-volumes:
-- /go/pkg/
-- /root/.cache/go-build/
+environment:
+  - ADVANCED_HEALTH_ENABLED=true
 sync:
-- .:/usr/src/app
-forward:
-- 2345:2345
-- 8080:8080
+  - .:/usr/src/app
+persistentVolume:
+  enabled: false
+divert:
+  ingress: catalog-chart
+  service: health-checker
+  port: 8080
