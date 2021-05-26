@@ -12,7 +12,11 @@ The developer uses the divert feature so that they can experiment and develop th
 
 # Original Application
 
+<img src="img/original.png" alt="Original Application" width="500">
+
 # Divert Added for Development
+
+<img src="img/diverted.png" alt="Diverted Application" width="500">
 
 # Demonstration
 
