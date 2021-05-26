@@ -17,7 +17,7 @@ function App() {
 
   return (
     <>
-      <Typography variant="h4" gutterBottom className={classes.header}>
+      <Typography variant="h5" gutterBottom className={classes.header}>
         Service Catalog
       </Typography>
       <Catalog />
