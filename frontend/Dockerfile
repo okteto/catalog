@@ -1,8 +1,13 @@
-FROM golang:buster as builder
+FROM node:14 as dev
 
-WORKDIR /
-ADD . .
-RUN go build ./main.go
+WORKDIR /src
 
-EXPOSE 8080
-CMD ["/main"]
+COPY package.json yarn.lock ./
+RUN yarn install
+COPY . .
+
+RUN yarn build
+
+FROM nginx:alpine
+COPY --from=dev /src/public /usr/share/nginx/html
+EXPOSE 80
