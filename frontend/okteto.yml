@@ -1,0 +1,5 @@
+name: frontend
+image: node:14
+command: bash
+persistentVolume:
+  enabled: false

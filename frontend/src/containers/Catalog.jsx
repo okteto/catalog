@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import useInterval from 'use-interval';
 import { makeStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
@@ -8,6 +8,8 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
 import Typography from '@material-ui/core/Typography';
+
+const POLLING_INTERVAL = 5000;
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -24,84 +26,48 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const fetchServices = async () => {
-  const response = await fetch('http://api:8080/data');
-  const data = response.json();
-  console.log(data);
+  try {
+    const response = await fetch('/data');
+    const data = await response.json();
+    return Object.keys(data).map(id => {
+      return { id, ...data[id] };
+    });
+  } catch(err) {
+    console.error(err);
+    return [];
+  }
 };
 
 function Catalog() {
   const classes = useStyles();
-  useInterval(() => {
-    fetchServices();
-  }, 1000);
+  const [services, setServices] = useState([]);
+
+  useInterval(async () => {
+    const services = await fetchServices();
+    if (services) {
+      setServices(services);
+    }
+  }, POLLING_INTERVAL, true);
 
   return (
     <List className={classes.root}>
-      <ListItem alignItems="flex-start">
-        <ListItemAvatar>
-          <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
-        </ListItemAvatar>
-        <ListItemText
-          primary="Brunch this weekend?"
-          secondary={
-            <React.Fragment>
-              <Typography
-                component="span"
-                variant="body2"
-                className={classes.inline}
-                color="textPrimary"
-              >
-                Ali Connors
-              </Typography>
-              {" — I'll be in your neighborhood doing errands this…"}
-            </React.Fragment>
+      {services.map((service, i) => (
+        <div key={service.id}>
+          <ListItem alignItems="flex-start">
+            <ListItemText
+              primary={service.service_name}
+              secondary={
+                <>
+                  {service.owner_name}
+                </>
+              }
+            />
+          </ListItem>
+          {i < services.length - 1 &&
+            <Divider component="li" />
           }
-        />
-      </ListItem>
-      <Divider variant="inset" component="li" />
-      <ListItem alignItems="flex-start">
-        <ListItemAvatar>
-          <Avatar alt="Travis Howard" src="/static/images/avatar/2.jpg" />
-        </ListItemAvatar>
-        <ListItemText
-          primary="Summer BBQ"
-          secondary={
-            <React.Fragment>
-              <Typography
-                component="span"
-                variant="body2"
-                className={classes.inline}
-                color="textPrimary"
-              >
-                to Scott, Alex, Jennifer
-              </Typography>
-              {" — Wish I could come, but I'm out of town this…"}
-            </React.Fragment>
-          }
-        />
-      </ListItem>
-      <Divider variant="inset" component="li" />
-      <ListItem alignItems="flex-start">
-        <ListItemAvatar>
-          <Avatar alt="Cindy Baker" src="/static/images/avatar/3.jpg" />
-        </ListItemAvatar>
-        <ListItemText
-          primary="Oui Oui"
-          secondary={
-            <React.Fragment>
-              <Typography
-                component="span"
-                variant="body2"
-                className={classes.inline}
-                color="textPrimary"
-              >
-                Sandra Adams
-              </Typography>
-              {' — Do you have Paris recommendations? Have you ever…'}
-            </React.Fragment>
-          }
-        />
-      </ListItem>
+        </div>
+      ))}
     </List>
   );
 }
