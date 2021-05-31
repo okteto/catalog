@@ -17,3 +17,17 @@ spec:
                 name: frontend
                 port:
                   number: 8080
+          # - path: /
+          #   pathType: Exact
+          #   backend:
+          #     service:
+          #       name: frontend
+          #       port:
+          #         number: 8080
+          - path: /data
+            pathType: Prefix
+            backend:
+              service:
+                name: api
+                port:
+                  number: 8080

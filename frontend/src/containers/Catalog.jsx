@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 import useInterval from 'use-interval';
-import TimeAgo from 'javascript-time-ago';
-import en from 'javascript-time-ago/locale/en';
 import { makeStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -10,9 +8,9 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
 import Typography from '@material-ui/core/Typography';
+import { deepPurple } from '@material-ui/core/colors';
 
-TimeAgo.addDefaultLocale(en);
-const timeAgo = new TimeAgo('en-US');
+import Health from './Health';
 
 const POLLING_INTERVAL = 5000;
 
@@ -26,8 +24,27 @@ const useStyles = makeStyles(theme => ({
     padding: 0
   },
 
-  inline: {
-    display: 'inline',
+  itemContent: {
+    alignSelf: 'center',
+    display: 'flex',
+    flexDirection: 'column',
+    flex: '1 auto',
+    margin: theme.spacing(2)
+  },
+
+  owner: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+
+  avatar: {
+    color: theme.palette.getContrastText(deepPurple[500]),
+    backgroundColor: deepPurple[500],
+    marginRight: theme.spacing(0.5),
+    height: '26px',
+    width: '26px',
+    fontSize: '1.2em'
   }
 }));
 
@@ -44,14 +61,6 @@ const fetchServices = async () => {
   }
 };
 
-const formatHealthTime = service => {
-  const healthData = service.HealthData ?? [];
-  if (healthData.length === 0) {
-    return 'No data';
-  }
-  return timeAgo.format(Date.now() - Number(healthData[0].timestamp), 'round')
-}
-
 function Catalog() {
   const classes = useStyles();
   const [services, setServices] = useState([]);
@@ -67,24 +76,21 @@ function Catalog() {
     <List className={classes.root}>
       {services.map((service, i) => (
         <div key={service.id}>
-          <ListItem alignItems="flex-start" button>
-            <ListItemText
-              primary={service.service_name}
-              secondary={
-                <>
-                  <Typography
-                    component="span"
-                    variant="body2"
-                    className={classes.inline}
-                    color="textPrimary"
-                  >
-                    {service.owner_name}
-                  </Typography>
-                  &nbsp;·&nbsp;
-                  {formatHealthTime(service)}
-                </>
-              }
-            />
+          <ListItem alignItems="flex-start">
+            <div className={classes.itemContent}>
+              <Typography component="span" variant="h6" color="textPrimary" gutterBottom>
+                {service.service_name}
+              </Typography>
+              <div className={classes.owner}>
+                <Avatar className={classes.avatar}>
+                  {service.owner_name[0]}
+                </Avatar>
+                <Typography component="span" variant="body1" color="textPrimary">
+                  {service.owner_name}
+                </Typography>
+              </div>
+            </div>
+            <Health data={service.HealthData ?? []}/>
           </ListItem>
           {i < services.length - 1 &&
             <Divider component="li" />
