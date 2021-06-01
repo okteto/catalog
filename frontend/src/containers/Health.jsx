@@ -1,33 +1,48 @@
 import React, { useState } from 'react';
-import TimeAgo from 'javascript-time-ago';
-import en from 'javascript-time-ago/locale/en';
+import { format, fromUnixTime } from 'date-fns'
 import { makeStyles } from '@material-ui/core/styles';
 import { green, red } from '@material-ui/core/colors';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import CancelIcon from '@material-ui/icons/Cancel';
-
-TimeAgo.addDefaultLocale(en);
-const timeAgo = new TimeAgo('en-US');
 
 const formatHealthTime = timestamp => {
   if (!timestamp) {
     return 'Unknown';
   }
-  return timeAgo.format(Date.now() - Number(timestamp), 'round')
+  return (
+    <>
+      {format(fromUnixTime(timestamp), 'MMM do')}
+      <br />
+      {format(fromUnixTime(timestamp), 'KK:mm:ss')}
+    </>
+  );
 }
 
 const useStyles = makeStyles((theme) => ({
-  root: {},
+  root: {
+    alignItems: 'stretch',
+    display: 'flex',
+    flex: '1 auto',
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+
+    // '& .MuiStepper-alternativeLabel': {
+    //   flexGrow: 1
+    // },
+
+    // '& .MuiStepLabel-alternativeLabel': {
+    //   maxWidth: '164px'
+    // },
+  },
 
   label: {
     '& .MuiStepLabel-alternativeLabel': {
       marginTop: theme.spacing(0.5),
       fontWeight: 'normal',
+      fontSize: '.8rem',
       opacity: '.8'
     }
   }
@@ -40,7 +55,7 @@ function Health({ data }) {
   return (
     <div className={classes.root}>
       <Stepper activeStep={activeStep} alternativeLabel>
-        {data.map((item, i) => (
+        {data.reverse().map((item, i) => (
           <Step key={i}>
             {item.healthy &&
               <StepLabel

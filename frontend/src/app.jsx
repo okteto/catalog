@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
+import useInterval from 'use-interval';
 import { render } from 'react-dom';
+
 import { makeStyles } from '@material-ui/core/styles';
 import { createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
@@ -13,6 +15,21 @@ import MenuIcon from '@material-ui/icons/Menu';
 
 import Catalog from './containers/Catalog';
 import './app.css';
+
+const POLLING_INTERVAL = 5000;
+
+const fetchServices = async () => {
+  try {
+    const response = await fetch('/data');
+    const data = await response.json();
+    return Object.keys(data).map(id => {
+      return { id, ...data[id] };
+    });
+  } catch(err) {
+    console.error(err);
+    return [];
+  }
+};
 
 const theme = createMuiTheme({
   palette: {
@@ -41,6 +58,18 @@ const useStyles = makeStyles(theme => ({
 
 function App() {
   const classes = useStyles();
+  const [services, setServices] = useState([]);
+
+  const refreshServices = async () => {
+    const services = await fetchServices();
+    if (services) {
+      setServices(services);
+    }
+  };
+
+  useInterval(async () => {
+    refreshServices()
+  }, POLLING_INTERVAL, true);
 
   return (
     <ThemeProvider theme={theme}>
@@ -53,10 +82,12 @@ function App() {
             <Typography variant="h6" color="inherit" className={classes.title}>
               Service Catalog
             </Typography>
-            <Button color="inherit">Refresh</Button>
+            <Button onClick={() => refreshServices()} color="inherit">
+              Refresh
+            </Button>
           </Toolbar>
         </AppBar>
-        <Catalog />
+        <Catalog services={services} />
       </div>
     </ThemeProvider>
   );

@@ -1,18 +1,13 @@
 import React, { useState } from 'react';
-import useInterval from 'use-interval';
 import { makeStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import Divider from '@material-ui/core/Divider';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
 import Typography from '@material-ui/core/Typography';
 import { deepPurple } from '@material-ui/core/colors';
 
 import Health from './Health';
-
-const POLLING_INTERVAL = 5000;
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -48,29 +43,8 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const fetchServices = async () => {
-  try {
-    const response = await fetch('/data');
-    const data = await response.json();
-    return Object.keys(data).map(id => {
-      return { id, ...data[id] };
-    });
-  } catch(err) {
-    console.error(err);
-    return [];
-  }
-};
-
-function Catalog() {
+function Catalog({ services = [] }) {
   const classes = useStyles();
-  const [services, setServices] = useState([]);
-
-  useInterval(async () => {
-    const services = await fetchServices();
-    if (services) {
-      setServices(services);
-    }
-  }, POLLING_INTERVAL, true);
 
   return (
     <List className={classes.root}>
