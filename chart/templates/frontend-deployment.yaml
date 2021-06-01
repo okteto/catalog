@@ -28,10 +28,10 @@ spec:
           livenessProbe:
             periodSeconds: 1
             httpGet:
-              path: /healthz
+              path: /index.html
               port: http
           readinessProbe:
             periodSeconds: 1
             httpGet:
-              path: /healthz
+              path: /index.html
               port: http
