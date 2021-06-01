@@ -1,5 +1,9 @@
 # Catalog
 
+Deploy the application in Okteto Staging by pressing the following button:
+
+[![Develop on Okteto](https://okteto.com/develop-okteto.svg)](https://staging.okteto.dev/deploy?repository=https://github.com/okteto/catalog)
+
 The catalog application is a demonstration application used for showing the Okteto divert feature set.
 The application uses canned data to mimic a service catalog.
 The service catalog tracks services, their owners and health information.
@@ -12,13 +16,13 @@ The developer uses the divert feature so that they can experiment and develop th
 
 # Original Application
 
+<img src="img/original.png" alt="Original Application" width="500">
+
 # Divert Added for Development
 
+<img src="img/diverted.png" alt="Diverted Application" width="500">
+
 # Demonstration
-
-Deploy the application in Okteto Staging by pressing the following button:
-
-[![Develop on Okteto](https://okteto.com/develop-okteto.svg)](https://staging.okteto.dev/deploy?repository=https://github.com/okteto/catalog)
 
 Once the application is running, if you access the application endpoint (for example, catalog-chart-cindy.staging.okteto.net) the application will only display the service catalog with the last known health check response.
 
