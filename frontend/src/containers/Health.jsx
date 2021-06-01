@@ -27,15 +27,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flex: '1 auto',
     flexDirection: 'row',
-    justifyContent: 'flex-end',
-
-    // '& .MuiStepper-alternativeLabel': {
-    //   flexGrow: 1
-    // },
-
-    // '& .MuiStepLabel-alternativeLabel': {
-    //   maxWidth: '164px'
-    // },
+    justifyContent: 'flex-end'
   },
 
   label: {
