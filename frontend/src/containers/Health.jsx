@@ -44,6 +44,33 @@ function Health({ data }) {
   const classes = useStyles();
   const [activeStep, setActiveStep] = useState(data.length);
 
+  if (data.length == 1) {
+    return (
+      <div className={classes.root}>
+        <Stepper activeStep={activeStep} alternativeLabel>
+          {data.reverse().map((item, i) => (
+            <Step key={i}>
+              {item.healthy &&
+                <StepLabel
+                  classes={{ labelContainer: classes.label }}
+                  icon={<CheckCircleIcon style={{ color: green[500] }} />}
+                >
+                </StepLabel>
+              }
+              {!item.healthy &&
+                <StepLabel
+                  classes={{ labelContainer: classes.label }}
+                  icon={<CancelIcon style={{ color: red[500] }} />}
+                >
+                </StepLabel>
+              }
+            </Step>
+          ))}
+        </Stepper>
+      </div>
+    );
+
+  } else {
   return (
     <div className={classes.root}>
       <Stepper activeStep={activeStep} alternativeLabel>
@@ -70,6 +97,7 @@ function Health({ data }) {
       </Stepper>
     </div>
   );
+  }
 }
 
 export default Health;
