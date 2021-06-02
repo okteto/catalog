@@ -37,6 +37,14 @@ const useStyles = makeStyles((theme) => ({
       fontSize: '.8rem',
       opacity: '.8'
     }
+  },
+
+  singleStatus: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: theme.spacing(2)
   }
 }));
 
@@ -44,10 +52,20 @@ function Health({ data }) {
   const classes = useStyles();
   const [activeStep, setActiveStep] = useState(data.length);
 
-  if (data.length == 1) {
-    return (
-      <div className={classes.root}>
-        <Stepper activeStep={activeStep} alternativeLabel>
+  return (
+    <div className={classes.root}>
+      {data.length === 1 &&
+        <div className={classes.singleStatus}>
+          {data[0].healthy &&
+            <CheckCircleIcon style={{ color: green[500] }} />
+          }
+          {!data[0].healthy &&
+            <CancelIcon style={{ color: red[500] }} />
+          }
+        </div>
+      }
+      {data.length > 1 &&
+        <Stepper activeStep={activeStep} alternativeLabel style={{ flex: '1' }}>
           {data.reverse().map((item, i) => (
             <Step key={i}>
               {item.healthy &&
@@ -55,6 +73,7 @@ function Health({ data }) {
                   classes={{ labelContainer: classes.label }}
                   icon={<CheckCircleIcon style={{ color: green[500] }} />}
                 >
+                  {formatHealthTime(item.timestamp)}
                 </StepLabel>
               }
               {!item.healthy &&
@@ -62,42 +81,15 @@ function Health({ data }) {
                   classes={{ labelContainer: classes.label }}
                   icon={<CancelIcon style={{ color: red[500] }} />}
                 >
+                  {formatHealthTime(item.timestamp)}
                 </StepLabel>
               }
             </Step>
           ))}
         </Stepper>
-      </div>
-    );
-
-  } else {
-  return (
-    <div className={classes.root}>
-      <Stepper activeStep={activeStep} alternativeLabel>
-        {data.reverse().map((item, i) => (
-          <Step key={i}>
-            {item.healthy &&
-              <StepLabel
-                classes={{ labelContainer: classes.label }}
-                icon={<CheckCircleIcon style={{ color: green[500] }} />}
-              >
-                {formatHealthTime(item.timestamp)}
-              </StepLabel>
-            }
-            {!item.healthy &&
-              <StepLabel
-                classes={{ labelContainer: classes.label }}
-                icon={<CancelIcon style={{ color: red[500] }} />}
-              >
-                {formatHealthTime(item.timestamp)}
-              </StepLabel>
-            }
-          </Step>
-        ))}
-      </Stepper>
+      }
     </div>
   );
-  }
 }
 
 export default Health;

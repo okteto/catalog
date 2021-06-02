@@ -16,7 +16,7 @@
     "start": "yarn develop",
     "build": "node ./build.js",
     "develop": "SHELL=/bin/bash chokidar \"src/**/*\" --initial -c \"yarn build\"& yarn serve",
-    "serve": "http-server public -a 0.0.0.0 -p 80"
+    "serve": "http-server public -a 0.0.0.0 -p 8080"
   },
   "devDependencies": {
     "chokidar-cli": "^2.1.0",

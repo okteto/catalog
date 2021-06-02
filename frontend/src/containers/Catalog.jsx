@@ -39,7 +39,7 @@ const useStyles = makeStyles(theme => ({
     marginRight: theme.spacing(0.5),
     height: '26px',
     width: '26px',
-    fontSize: '1.2em'
+    fontSize: '1.2em',
   }
 }));
 
@@ -50,7 +50,7 @@ function Catalog({ services = [] }) {
     <List className={classes.root}>
       {services.map((service, i) => (
         <div key={service.id}>
-          <ListItem alignItems="flex-start">
+          <ListItem alignItems="center">
             <div className={classes.itemContent}>
               <Typography component="span" variant="h6" color="textPrimary" gutterBottom>
                 {service.service_name}
