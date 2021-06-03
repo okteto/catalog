@@ -24,7 +24,8 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     flexDirection: 'column',
     flex: '1 auto',
-    margin: theme.spacing(2)
+    margin: theme.spacing(2),
+    maxWidth: '250px'
   },
 
   owner: {
