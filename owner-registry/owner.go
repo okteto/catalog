@@ -6,6 +6,7 @@ import (
 	"net/http"
 )
 
+// Owner is a registered service owner.
 type Owner struct {
 	ID         string
 	Name       string
@@ -37,6 +38,7 @@ var owners = []Owner{
 	},
 }
 
+// Handler provides provides registered owners over http.
 func Handler(w http.ResponseWriter, r *http.Request) {
 	jsonBytes, err := json.MarshalIndent(&owners, "", "\t")
 	if err != nil {

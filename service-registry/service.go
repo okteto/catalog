@@ -6,6 +6,7 @@ import (
 	"net/http"
 )
 
+// Service is a registered service and associated data.
 type Service struct {
 	ID         string `json:"id"`
 	Name       string `json:"name"`
@@ -35,6 +36,7 @@ var registeredServices = []Service{
 	},
 }
 
+// Handler is used to provide the registered services with http.
 func Handler(w http.ResponseWriter, r *http.Request) {
 	jsonBytes, err := json.MarshalIndent(&registeredServices, "", "\t")
 	if err != nil {

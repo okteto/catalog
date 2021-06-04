@@ -3,8 +3,6 @@ labels:
   app.kubernetes.io/component: health-checker
 image: okteto/golang:1
 command: bash
-environment:
-  - ADVANCED_HEALTH_ENABLED=true
 sync:
   - .:/usr/src/app
 persistentVolume:
