@@ -5,7 +5,7 @@ The application uses canned data to mimic a service catalog.
 The service catalog tracks services, their owners, and health information.
 
 The original deployment contains only the most recent health data for each service in the catalog.
-This is heplful but it could be better.
+This is helpful but it could be better.
 
 A developer decides that health data for each service would be more helpful if it contained historical data.
 In this scenario the developer adds a data store and changes the health-checking service to provide more data.
