@@ -16,10 +16,10 @@
     "start": "yarn develop",
     "build": "node ./build.js",
     "develop": "SHELL=/bin/bash chokidar \"src/**/*\" --initial -c \"yarn build\"& yarn serve",
-    "serve": "http-server public -a 0.0.0.0 -p 80"
+    "serve": "serve --no-clipboard -l tcp://0.0.0.0:8080 public"
   },
   "devDependencies": {
     "chokidar-cli": "^2.1.0",
-    "http-server": "^0.12.3"
+    "serve": "^11.3.2"
   }
 }
