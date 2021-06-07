@@ -18,8 +18,7 @@ var log = zerolog.New(os.Stdout).With().
 	Logger()
 
 type appCfg struct {
-	HTTPPort              string `env:"HTTP_PORT" envDefault:"8080"`
-	AdvancedHealthEnabled bool   `env:"ADVANCED_HEALTH_ENABLED" envDefault:"false"`
+	HTTPPort string `env:"HTTP_PORT" envDefault:"8080"`
 }
 
 func main() {
@@ -46,15 +45,8 @@ func main() {
 		hlog.RequestIDHandler("rid", "Request-Id"),
 	)
 
-	var healthClient health.HealthClient
-	if app.AdvancedHealthEnabled {
-		healthClient = &health.AdvancedHealthClient{}
-	} else {
-		healthClient = &health.SimpleHealthClient{}
-	}
-
 	healthHandler := health.Handler{
-		HealthClient: healthClient,
+		HealthClient: &health.SimpleHealthClient{},
 	}
 
 	handler := http.NewServeMux()

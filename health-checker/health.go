@@ -1,5 +1,7 @@
 package health
 
+// SimpleHealthClient represents a client that obtains health service
+// in real time and has no historical health data available to it.
 type SimpleHealthClient struct{}
 
 func (s *SimpleHealthClient) Get() []ServiceHealth {
@@ -43,6 +45,8 @@ func (s *SimpleHealthClient) Get() []ServiceHealth {
 	}
 }
 
+// AdvancedHealthClient represents a client that obtains historical service
+// health from a persistent store.
 type AdvancedHealthClient struct{}
 
 func (a *AdvancedHealthClient) Get() []ServiceHealth {
