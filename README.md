@@ -30,7 +30,7 @@ $ okteto pipeline deploy --wait
 
 The `okteto pipeline deploy` command creates all of the necessary components for your app to run with Okteto in Kubernetes.
 
-After your pipeline has successfully deployed your application visit [Okteto Cloud](https://cloud.cokteto.com/#/?origin=docs).
+After your pipeline has successfully deployed your application visit [Okteto Cloud](https://cloud.okteto.com/#/?origin=docs).
 Once you have this pulled up you can see your pipeline deployed and the URL that was created for the application.
 The URL will be similar to `https://catalog-chart-cindy.okteto.net`.
 
