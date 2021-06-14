@@ -85,3 +85,9 @@ Now if you visit the development url you can see the changes live.
 The original application is left untouched and is still available at the original url.
 
 <img src="img/edited.png" alt="Original Application" width="480">
+
+## Application Architecture with Divert
+
+With the catalog application deployed, and the divert development container in place the resulting deployment is...
+
+<img src="img/arch.png" alt="Application Divert Architecture" width="480">
