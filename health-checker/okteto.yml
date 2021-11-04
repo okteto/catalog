@@ -1,5 +1,5 @@
 name: health-checker
-labels:
+selector:
   app.kubernetes.io/component: health-checker
 image: okteto/golang:1
 command: bash
