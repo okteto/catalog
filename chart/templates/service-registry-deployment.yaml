@@ -20,7 +20,7 @@ spec:
       terminationGracePeriodSeconds: 0
       containers:
         - name: service-registry
-          image: "{{ .Values.serviceRegistry.image }}:{{ .Values.tag }}"
+          image: {{ .Values.serviceRegistry.image }}
           ports:
             - name: http
               containerPort: 8080

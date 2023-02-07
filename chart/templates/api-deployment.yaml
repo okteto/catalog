@@ -20,7 +20,7 @@ spec:
       terminationGracePeriodSeconds: 0
       containers:
         - name: api
-          image: {{ .Values.api.image }}:{{ .Values.tag }}
+          image: {{ .Values.api.image }}
           env:
             - name: HEALTH_CHECKER_URL
               value: "http://health-checker:8080/service-health"

@@ -20,7 +20,7 @@ spec:
       terminationGracePeriodSeconds: 0
       containers:
         - name: health-checker
-          image: "{{ .Values.healthChecker.image }}:{{ .Values.tag }}"
+          image: {{ .Values.healthChecker.image }}
           ports:
             - name: http
               containerPort: 8080

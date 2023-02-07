@@ -1,0 +1,21 @@
+apiVersion: weaver.okteto.com/v1
+kind: Divert
+metadata:
+  name: jmacelroy-health-checker
+  namespace: jacob
+spec:
+  deployment:
+    name: health-checker
+    namespace: jacob
+  fromService:
+    name: health-checker
+    namespace: jacob
+    port: 8080
+  ingress:
+    name: catalog-chart
+    namespace: jacob
+    value: jacob
+  toService:
+    name: health-checker
+    namespace: sandbox
+    port: 8080

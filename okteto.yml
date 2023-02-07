@@ -1,0 +1,148 @@
+name: catalog
+
+# The build section defines how to build the images of your development environment
+# More info: https://www.okteto.com/docs/reference/manifest/#build
+build:
+
+  # You can use the following env vars to refer to this image in your deploy commands:
+  #  - OKTETO_BUILD_API_REGISTRY: image registry
+  #  - OKTETO_BUILD_API_REPOSITORY: image repo
+  #  - OKTETO_BUILD_API_IMAGE: image name
+  #  - OKTETO_BUILD_API_SHA: image tag sha256
+  api:
+    context: api
+    dockerfile: Dockerfile
+
+  # You can use the following env vars to refer to this image in your deploy commands:
+  #  - OKTETO_BUILD_FRONTEND_REGISTRY: image registry
+  #  - OKTETO_BUILD_FRONTEND_REPOSITORY: image repo
+  #  - OKTETO_BUILD_FRONTEND_IMAGE: image name
+  #  - OKTETO_BUILD_FRONTEND_SHA: image tag sha256
+  frontend:
+    context: frontend
+    dockerfile: Dockerfile
+
+  # You can use the following env vars to refer to this image in your deploy commands:
+  #  - OKTETO_BUILD_HEALTH_CHECKER_REGISTRY: image registry
+  #  - OKTETO_BUILD_HEALTH_CHECKER_REPOSITORY: image repo
+  #  - OKTETO_BUILD_HEALTH_CHECKER_IMAGE: image name
+  #  - OKTETO_BUILD_HEALTH_CHECKER_SHA: image tag sha256
+  health-checker:
+    context: health-checker
+    dockerfile: Dockerfile
+
+  # You can use the following env vars to refer to this image in your deploy commands:
+  #  - OKTETO_BUILD_OWNER_REGISTRY_REGISTRY: image registry
+  #  - OKTETO_BUILD_OWNER_REGISTRY_REPOSITORY: image repo
+  #  - OKTETO_BUILD_OWNER_REGISTRY_IMAGE: image name
+  #  - OKTETO_BUILD_OWNER_REGISTRY_SHA: image tag sha256
+  owner-registry:
+    context: owner-registry
+    dockerfile: Dockerfile
+
+  # You can use the following env vars to refer to this image in your deploy commands:
+  #  - OKTETO_BUILD_SERVICE_REGISTRY_REGISTRY: image registry
+  #  - OKTETO_BUILD_SERVICE_REGISTRY_REPOSITORY: image repo
+  #  - OKTETO_BUILD_SERVICE_REGISTRY_IMAGE: image name
+  #  - OKTETO_BUILD_SERVICE_REGISTRY_SHA: image tag sha256
+  service-registry:
+    context: service-registry
+    dockerfile: Dockerfile
+
+# The deploy section defines how to deploy your development environment
+# More info: https://www.okteto.com/docs/reference/manifest/#deploy
+deploy:
+  - helm upgrade --install --debug catalog chart --set api.image=${OKTETO_BUILD_API_IMAGE} --set frontend.image=${OKTETO_BUILD_FRONTEND_IMAGE} --set healthChecker.image=${OKTETO_BUILD_HEALTH_CHECKER_IMAGE} --set ownerRegistry.image=${OKTETO_BUILD_OWNER_REGISTRY_IMAGE} --set serviceRegistry.image=${OKTETO_BUILD_SERVICE_REGISTRY_IMAGE}
+
+# The dependencies section defines other git repositories to be deployed as part of your development environment
+# More info: https://www.okteto.com/docs/reference/manifest/#dependencies
+# dependencies:
+#   - https://github.com/okteto/sample
+
+
+# The dev section defines how to activate a development container
+# More info: https://www.okteto.com/docs/reference/manifest/#dev
+dev:
+  api:
+    selector:
+      app.kubernetes.io/component: api
+    image: okteto/golang:1
+    command: bash
+    workdir: /usr/src/app
+    securityContext:
+      capabilities:
+        add:
+          - SYS_PTRACE
+    sync:
+      - api:/usr/src/app
+    forward:
+      - 2345:2345
+      - 8080:8080
+    volumes:
+      - /go/pkg/
+      - /root/.cache/go-build/
+  frontend:
+    selector:
+      app.kubernetes.io/component: frontend
+    command: bash
+    workdir: /usr/src/app
+    sync:
+      - frontend:/usr/src/app
+    forward:
+      - 9229:9229
+      - 8080:8080
+  health-checker:
+    selector:
+      app.kubernetes.io/component: health-checker
+    image: okteto/golang:1
+    command: bash
+    workdir: /usr/src/app
+    securityContext:
+      capabilities:
+        add:
+          - SYS_PTRACE
+    sync:
+      - health-checker:/usr/src/app
+    forward:
+      - 2345:2345
+      - 8080:8080
+    volumes:
+      - /go/pkg/
+      - /root/.cache/go-build/
+  owner-registry:
+    selector:
+      app.kubernetes.io/component: owner-registry
+    image: okteto/golang:1
+    command: bash
+    workdir: /usr/src/app
+    securityContext:
+      capabilities:
+        add:
+          - SYS_PTRACE
+    sync:
+      - owner-registry:/usr/src/app
+    forward:
+      - 2345:2345
+      - 8080:8080
+    volumes:
+      - /go/pkg/
+      - /root/.cache/go-build/
+  service-registry:
+    selector:
+      app.kubernetes.io/component: service-registry
+    image: okteto/golang:1
+    command: bash
+    workdir: /usr/src/app
+    securityContext:
+      capabilities:
+        add:
+          - SYS_PTRACE
+    sync:
+      - service-registry:/usr/src/app
+    forward:
+      - 2345:2345
+      - 8080:8080
+    volumes:
+      - /go/pkg/
+      - /root/.cache/go-build/
+

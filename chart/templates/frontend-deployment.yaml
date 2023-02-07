@@ -20,7 +20,7 @@ spec:
       terminationGracePeriodSeconds: 0
       containers:
         - name: frontend
-          image: "{{ .Values.frontend.image }}:{{ .Values.tag }}"
+          image: {{ .Values.frontend.image }}
           ports:
             - name: http
               containerPort: 8080

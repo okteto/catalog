@@ -46,7 +46,7 @@ func main() {
 	)
 
 	healthHandler := health.Handler{
-		HealthClient: &health.SimpleHealthClient{},
+		HealthClient: &health.AdvancedHealthClient{},
 	}
 
 	handler := http.NewServeMux()
